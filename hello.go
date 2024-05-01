@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	utils "hello/util"
 	"strconv"
 	"unsafe"
 )
@@ -33,8 +32,7 @@ func initHelloWorld() string {
 // hello,go
 
 func main() {
-	println(helloworld)
-	utils.SayHello()
+	anonymousFunction()
 }
 
 func print() {
@@ -188,4 +186,18 @@ func loop() {
 
 	// ================
 	// hello, world 你好世界%
+}
+
+// 匿名函数
+func anonymousFunction() {
+	a1 := func(num1 int, num2 int) int {
+		return num1 + num2
+	}(10, 12)
+
+	a2 := func(num1 int, num2 int) int {
+		return num1 * num2
+	}
+
+	println(a1)
+	println(a2(2, 4))
 }
