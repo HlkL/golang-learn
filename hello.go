@@ -2,12 +2,39 @@ package main
 
 import (
 	"fmt"
+	utils "hello/util"
 	"strconv"
 	"unsafe"
 )
 
+var helloworld string = initHelloWorld()
+
+func init() {
+	println("main package init...")
+}
+
+func initHelloWorld() string {
+	println("initHelloWorld")
+	return "hello,world"
+}
+
+// 执行顺序： 全局变量 -> init函数 -> main  优先执行导入包的
+// func main() {
+// 	println(helloworld)
+// 	utils.SayHello()
+// }
+// 代码执行结果：
+// initAge
+// initName
+// utils package init ...
+// initHelloWorld
+// main package init...
+// hello,world
+// hello,go
+
 func main() {
-	multipleVarInput()
+	println(helloworld)
+	utils.SayHello()
 }
 
 func print() {
@@ -85,4 +112,80 @@ func multipleVarInput() {
 	println("input:")
 	fmt.Scanf("%s %d %t", &name, &age, &pass)
 	fmt.Println("name is", name, "age is", age, "pass", pass)
+}
+
+func loop() {
+	str := "hello, world 你好世界"
+	fmt.Println("================")
+	// 普通fori循环默认遍历字节，中文会出现乱码
+	for i := 0; i < len(str); i++ {
+		fmt.Printf("%c", str[i])
+	}
+	println()
+
+	for i := 0; i < 5; i++ {
+		fmt.Print(i, "\t")
+	}
+
+	fmt.Println("\n================")
+	index := 0
+	for index < 5 {
+		index++
+		fmt.Print(index, "\t")
+	}
+
+	fmt.Println("\n================")
+	count := 5
+	for {
+		count--
+
+		if count < 1 {
+			break
+		}
+
+		fmt.Print(count, "\t")
+	}
+
+	fmt.Println("\n================")
+	// range 按照字符遍历，可以遍历中文，每一个中午占3个字节， 中文也可通过切片遍历
+	for index, ch := range str {
+		fmt.Printf("index: %d ch: %c\n", index, ch)
+	}
+
+	fmt.Println("================")
+	// 将字符串转化为切片
+	strArr := []rune(str)
+	for i := 0; i < len(strArr); i++ {
+		fmt.Printf("%c", strArr[i])
+	}
+
+	// 函数运行结果：
+	// ================
+	// hello, world ä½ å¥½ä¸ç
+	// 0       1       2       3       4
+	// ================
+	// 1       2       3       4       5
+	// ================
+	// 4       3       2       1
+	// ================
+	// index: 0 ch: h
+	// index: 1 ch: e
+	// index: 2 ch: l
+	// index: 3 ch: l
+	// index: 4 ch: o
+	// index: 5 ch: ,
+	// index: 6 ch:
+	// index: 7 ch: w
+	// index: 8 ch: o
+	// index: 9 ch: r
+	// index: 10 ch: l
+	// index: 11 ch: d
+	// index: 12 ch:
+	// index: 13 ch: 你
+	// index: 16 ch: 好
+	// index: 19 ch: 世
+	// index: 22 ch: 界
+
+	// ================
+	// hello, world 你好世界%
 }
