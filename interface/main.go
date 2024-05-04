@@ -24,12 +24,12 @@ type computer struct{
 
 }
 
-func (computer *computer) worker(game game) {
+func (computer *computer) work(game game) {
 	game.start()
 	game.end()
 }
 
-func worker(game game)  {
+func work(game game)  {
 	game.start()
 	game.end()
 }
@@ -37,6 +37,6 @@ func worker(game game)  {
 func main()  {
 	lol := lol{}
 	computer := computer{}
-	computer.worker(lol)
-	worker(lol)
+	computer.work(lol)
+	work(lol)
 }
