@@ -22,6 +22,23 @@ func init() {
 
 func main() {
 	readAndWriteDemo()
+
+	var rc chan int = make(chan int, 2)
+	var wc chan int = make(chan int, 2)
+	onlyRead(rc)
+	onlyWrite(wc)
+}
+
+func onlyRead(r <-chan int) {
+	// 只读管道
+	_ = <- r
+	r <- 12
+}
+
+func onlyWrite(w chan<- int) {
+	// 只写管道
+	w <- 32
+	_ = <- w
 }
 
 func readAndWriteDemo() {
@@ -38,7 +55,7 @@ func readAndWriteDemo() {
 
 	go func(writer chan int, exit chan bool) {
 		for {
-			v, ok := <- writer
+			v, ok := <-writer
 			if !ok {
 				break
 			}
@@ -49,7 +66,7 @@ func readAndWriteDemo() {
 	}(writeChan, exitChan)
 
 	for {
-		ok := <- exitChan
+		ok := <-exitChan
 		if !ok {
 			break
 		}
