@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	_ "time"
+	"time"
 )
 
 func print() {
@@ -22,7 +22,40 @@ func init() {
 
 func main() {
 	readAndWriteDemo()
+	selectDemo()
+}
 
+func selectDemo() {
+	var ic chan int = make(chan int, 10)
+	var sc chan string = make(chan string, 10)
+
+	for i := 0; i < 10; i++ {
+		ic <- i
+		time.Sleep(time.Millisecond * 300)
+	}
+
+	for i := 0; i < 10; i++ {
+		sc <- fmt.Sprintf("str %d", i)
+		time.Sleep(time.Millisecond * 300)
+	}
+
+	// select: 执行任意一个符合条件的case，当没有符合条件则会发生 deadlock
+	label:
+	for {
+		select {
+		case num := <-ic:
+			fmt.Println(num)
+		case str := <-sc:
+			fmt.Println(str)
+		default:
+			fmt.Println("管道没有数据")
+			time.Sleep(time.Second)
+			break label
+		}
+	}
+}
+
+func onlyReadOrWriteDemo() {
 	var rc chan int = make(chan int, 2)
 	var wc chan int = make(chan int, 2)
 	onlyRead(rc)
@@ -31,14 +64,14 @@ func main() {
 
 func onlyRead(r <-chan int) {
 	// 只读管道
-	_ = <- r
-	r <- 12
+	_ = <-r
+	// r <- 12
 }
 
 func onlyWrite(w chan<- int) {
 	// 只写管道
 	w <- 32
-	_ = <- w
+	// _ = <-w
 }
 
 func readAndWriteDemo() {
