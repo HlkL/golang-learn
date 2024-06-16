@@ -21,7 +21,7 @@ func helloworld() {
 }
 
 func main() {
-	saveUserInfo()
+	post()
 }
 
 func get() {
