@@ -136,6 +136,31 @@ func main() {
 		})
 	})
 
+	r.POST("upload/multi", func(ctx *gin.Context) {
+		form, err := ctx.MultipartForm()
+		if err != nil {
+			ctx.JSON(http.StatusExpectationFailed, gin.H{
+				"message": err.Error(),
+			})
+		}
+
+		files := form.File["file"]
+		for _, file := range files {
+
+			fmt.Printf("file.Filename: %v\n", file.Filename)
+			// 将上传的文件保存到指定位置
+			if err := ctx.SaveUploadedFile(file, "/Users/hougen/Downloads/"+file.Filename); err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{
+					"message": err.Error(),
+				})
+			}
+		}
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"message": "ok",
+		})
+	})
+
 	r.Run()
 }
 
